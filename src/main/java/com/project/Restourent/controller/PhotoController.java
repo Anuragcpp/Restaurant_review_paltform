@@ -1,11 +1,12 @@
 package com.project.Restourent.controller;
 
-import com.project.Restourent.domain.dtos.PhotoDto;
+import com.project.Restourent.domain.dtos.response.ApiResponse;
 import com.project.Restourent.domain.entities.Photo;
 import com.project.Restourent.mappers.PhotoMapper;
 import com.project.Restourent.service.PhotoService;
-import com.project.Restourent.service.StorageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,8 +18,17 @@ public class PhotoController {
     private final PhotoMapper photoMapper;
 
     @PostMapping
-    public PhotoDto uploadPhoto(@RequestParam("file")MultipartFile file) {
+    public ResponseEntity<ApiResponse> uploadPhoto(@RequestParam("file")MultipartFile file) {
         Photo photo = photoService.uploadPhoto(file);
-        return photoMapper.toDto(photo);
+        return new ResponseEntity<>(
+                new ApiResponse(
+                        HttpStatus.OK.value(),
+                        "File Uploaded Successfully",
+                        photoMapper.toDto(photo)
+                ),
+                HttpStatus.OK
+        );
     }
+
+    //public  void getPhoto
 }
