@@ -1,6 +1,7 @@
 package com.project.Restourent.controller;
 
 import com.project.Restourent.domain.dtos.response.ApiErrorResponse;
+import com.project.Restourent.exception.BaseException;
 import com.project.Restourent.exception.StorageException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,31 @@ public class ErrorController {
 
     @ExceptionHandler(StorageException.class)
     public ResponseEntity<ApiErrorResponse> handleStorageException (StorageException ex) {
-        log.error("Caught en error: ", ex);
+        log.error("Caught StorageException: ", ex);
+        return new ResponseEntity<>(
+                new ApiErrorResponse(
+                        HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                        "Internal Server Error"
+                ),
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
+    }
+
+    @ExceptionHandler(BaseException.class)
+    public ResponseEntity<ApiErrorResponse> handleBaseException (BaseException ex) {
+        log.error("Caught BaseException: ", ex);
+        return new ResponseEntity<>(
+                new ApiErrorResponse(
+                        HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                        "Internal Server Error"
+                ),
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiErrorResponse> handleException (Exception ex) {
+        log.error("Caught Exception: ", ex);
         return new ResponseEntity<>(
                 new ApiErrorResponse(
                         HttpStatus.INTERNAL_SERVER_ERROR.value(),

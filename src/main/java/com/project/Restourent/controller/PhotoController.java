@@ -5,8 +5,8 @@ import com.project.Restourent.domain.entities.Photo;
 import com.project.Restourent.mappers.PhotoMapper;
 import com.project.Restourent.service.PhotoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.Resource;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,5 +30,19 @@ public class PhotoController {
         );
     }
 
-    //public  void getPhoto
+    @GetMapping(path = "/{id:.+}")
+    public  ResponseEntity<Resource> getPhoto (
+            @PathVariable String id
+    ){
+        return photoService.getPhotoAsResource(id).map(
+                photo ->
+                        ResponseEntity.ok()
+                                .contentType(
+                                        MediaTypeFactory.getMediaType(photo)
+                                                .orElse(MediaType.APPLICATION_OCTET_STREAM)
+                                )
+                                .header(HttpHeaders.CONTENT_DISPOSITION,"inline")
+                                .body(photo)
+        ).orElse(ResponseEntity.notFound().build());
+    }
 }
