@@ -10,10 +10,12 @@ import com.project.Restourent.service.GeoLocationService;
 import com.project.Restourent.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Service
 public class RestaurantServiceImpl implements RestaurantService {
 
     @Autowired
@@ -34,7 +36,9 @@ public class RestaurantServiceImpl implements RestaurantService {
                 .name(request.getName())
                 .cuisineType(request.getCuisineType())
                 .address(request.getAddress())
+                .createdBy(request.getCreatedBy())
                 .contactInformation(request.getContactInformation())
+                .operatingHours(request.getOperatingHours())
                 .geoLocation(geoPoint)
                 .averageRating(0f)
                 .photos(photos)

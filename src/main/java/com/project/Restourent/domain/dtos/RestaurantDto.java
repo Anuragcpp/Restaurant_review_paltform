@@ -34,7 +34,7 @@ public class RestaurantDto {
 
     private AddressDto address;
 
-    private OperatingHours operatingHours;
+    private OperatingHoursDto operatingHours;
 
     private List<PhotoDto> photos = new ArrayList<>();
 

@@ -2,6 +2,7 @@ package com.project.Restourent.domain.dtos;
 
 import com.project.Restourent.domain.entities.Address;
 import com.project.Restourent.domain.entities.OperatingHours;
+import com.project.Restourent.domain.entities.User;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -28,10 +29,13 @@ public class RestaurantCreateUpdateRequestDto {
     private String  contactInformation;
 
     @Valid
-    private Address address;
+    private AddressDto address;
 
     @Valid
-    private OperatingHours operatingHours;
+    private UserDto createdBy;
+
+    @Valid
+    private OperatingHoursDto operatingHours;
 
     @Size(min = 1, message = "Minimum one Photo ID is required")
     private List<String> photoIds;
