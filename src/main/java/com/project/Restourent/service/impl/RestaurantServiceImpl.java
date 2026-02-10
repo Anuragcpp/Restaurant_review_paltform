@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
@@ -52,7 +53,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     public Page<Restaurant> searchRestaurants(String query, Float minRating, Float latitude, Float longitude, Float radius, Pageable pageable) {
 
         if (minRating != null && ( query == null || query.isEmpty())) {
-            return restaurantRepository.findByAverageRatingGraterThanEqual(minRating,pageable);
+            return restaurantRepository.findByAverageRatingGreaterThanEqual(minRating,pageable);
         }
 
         Float searchMinRating = minRating == null ? 0f : minRating;
@@ -65,6 +66,11 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
 
         return restaurantRepository.findAll(pageable);
+    }
+
+    @Override
+    public Optional<Restaurant> findRestaurantById(String id) {
+        return restaurantRepository.findById(id);
     }
 
 }

@@ -29,7 +29,7 @@ public interface RestaurantMappers {
     RestaurantSummeryDto toRestaurantSummeryDto(Restaurant restaurant);
 
     @Named("populateTotalReview")
-    private Integer populateTotalReview(List<Review> reviews){
+    default Integer populateTotalReview(List<Review> reviews){
         return reviews.size();
     }
 }
