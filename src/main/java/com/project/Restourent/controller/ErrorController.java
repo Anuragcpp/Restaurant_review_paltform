@@ -25,8 +25,9 @@ public class ErrorController {
         log.error("Caught ReviewNotFoundException " , ex);
         ApiErrorResponse response = ApiErrorResponse.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
-                .message("")
+                .message("The Specified Review cannot be created or updated")
                 .build();
+        return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(RestaurantNotFoundException.class)
