@@ -101,4 +101,19 @@ public class RestaurantController {
                 HttpStatus.OK
         );
     }
+
+    @DeleteMapping("/{restaurant_id}")
+    public ResponseEntity<ApiResponse> deleteRestaurant(
+            @PathVariable(name = "restaurant_id") String id
+    ){
+        restaurantService.deleteRestaurant(id);
+        return new ResponseEntity<>(
+                new ApiResponse(
+                        HttpStatus.OK.value(),
+                        "Restaurant with ID deleted successfully : "+ id,
+                        null
+                ),
+                HttpStatus.OK
+        );
+    }
 }

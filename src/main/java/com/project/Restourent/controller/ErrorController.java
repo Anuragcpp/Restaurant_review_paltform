@@ -3,6 +3,7 @@ package com.project.Restourent.controller;
 import com.project.Restourent.domain.dtos.response.ApiErrorResponse;
 import com.project.Restourent.exception.BaseException;
 import com.project.Restourent.exception.RestaurantNotFoundException;
+import com.project.Restourent.exception.ReviewNotAllowedException;
 import com.project.Restourent.exception.StorageException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,15 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 @Slf4j
 public class ErrorController {
+
+    @ExceptionHandler(ReviewNotAllowedException.class)
+    public ResponseEntity<ApiErrorResponse> handleReviewNotAllowedException( RestaurantNotFoundException ex) {
+        log.error("Caught ReviewNotFoundException " , ex);
+        ApiErrorResponse response = ApiErrorResponse.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message("")
+                .build();
+    }
 
     @ExceptionHandler(RestaurantNotFoundException.class)
     public ResponseEntity<ApiErrorResponse> handleRestaurantNotFoundException(RestaurantNotFoundException ex){
