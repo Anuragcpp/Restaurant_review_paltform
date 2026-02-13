@@ -84,4 +84,21 @@ public class RestaurantController {
                     ),
                     HttpStatus.NOT_FOUND);
     }
+
+    @PutMapping("/{restaurant_id}")
+    public ResponseEntity<ApiResponse> updateRestaurant(
+            @PathVariable(name = "{restaurant_id}") String id,
+            @Valid @RequestBody RestaurantCreateUpdateRequestDto restaurantDto
+    ){
+        RestaurantCreateUpdateRequest restaurantCreateUpdateRequest = restaurantMappers.toRestaurantCreateUpdateRequest(restaurantDto);
+        Restaurant restaurant = restaurantService.updateRestaurant(id,restaurantCreateUpdateRequest);
+        return new ResponseEntity<>(
+                new ApiResponse(
+                        HttpStatus.OK.value(),
+                        "Restaurant With Id update successfully : " + id,
+                        restaurant
+                ),
+                HttpStatus.OK
+        );
+    }
 }

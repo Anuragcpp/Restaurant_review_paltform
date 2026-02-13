@@ -5,6 +5,7 @@ import com.project.Restourent.domain.RestaurantCreateUpdateRequest;
 import com.project.Restourent.domain.entities.Address;
 import com.project.Restourent.domain.entities.Photo;
 import com.project.Restourent.domain.entities.Restaurant;
+import com.project.Restourent.exception.RestaurantNotFoundException;
 import com.project.Restourent.repository.RestaurantRepository;
 import com.project.Restourent.service.GeoLocationService;
 import com.project.Restourent.service.RestaurantService;
@@ -71,6 +72,34 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     public Optional<Restaurant> findRestaurantById(String id) {
         return restaurantRepository.findById(id);
+    }
+
+    @Override
+    public Restaurant updateRestaurant(String id, RestaurantCreateUpdateRequest restaurantCreateUpdateRequest) {
+        Restaurant restaurant =   findRestaurantById(id)
+                .orElseThrow(
+                () -> new RestaurantNotFoundException("Restaurant with Id does not exist : " + id)
+        );
+        GeoLocation newGeoLocation = geoLocationService.getGeoLocation(restaurantCreateUpdateRequest.getAddress());
+        GeoPoint newGeoPoint  = new GeoPoint(newGeoLocation.getLatitude(), newGeoLocation.getLongitude());
+        List<Photo> photos = restaurantCreateUpdateRequest
+                .getPhotoIds()
+                .stream()
+                .map(photo ->  Photo.builder()
+                .url(photo)
+                .uploadedDate(LocalDateTime.now())
+                .build()
+                ).toList();
+
+        restaurant.setName(restaurantCreateUpdateRequest.getName());
+        restaurant.setCuisineType(restaurantCreateUpdateRequest.getCuisineType());
+        restaurant.setContactInformation(restaurantCreateUpdateRequest.getContactInformation());
+        restaurant.setAddress(restaurantCreateUpdateRequest.getAddress());
+        restaurant.setGeoLocation(newGeoPoint);
+        restaurant.setOperatingHours(restaurantCreateUpdateRequest.getOperatingHours());
+        restaurant.setPhotos(photos);
+
+        return restaurantRepository.save(restaurant);
     }
 
 }

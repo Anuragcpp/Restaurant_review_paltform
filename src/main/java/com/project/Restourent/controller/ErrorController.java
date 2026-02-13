@@ -2,6 +2,7 @@ package com.project.Restourent.controller;
 
 import com.project.Restourent.domain.dtos.response.ApiErrorResponse;
 import com.project.Restourent.exception.BaseException;
+import com.project.Restourent.exception.RestaurantNotFoundException;
 import com.project.Restourent.exception.StorageException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,16 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 @Slf4j
 public class ErrorController {
+
+    @ExceptionHandler(RestaurantNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleRestaurantNotFoundException(RestaurantNotFoundException ex){
+        log.error("Caught RestaurantNotFoundException ",ex);
+        ApiErrorResponse response = ApiErrorResponse.builder()
+                .status(HttpStatus.NO_CONTENT.value())
+                .message("Specified Restaurant wasn't found")
+                .build();
+        return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex){
