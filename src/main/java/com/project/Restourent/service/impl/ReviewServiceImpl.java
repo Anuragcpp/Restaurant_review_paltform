@@ -94,6 +94,11 @@ public class ReviewServiceImpl implements ReviewService {
         return restaurant.getReviews().stream().filter(review -> review.getId().equals(reviewId)).findFirst();
     }
 
+    @Override
+    public Review updateReview(User user, String restaurantId, String reviewId, ReviewCreateUpdateRequest reviewCreateUpdateRequest) {
+        return null;
+    }
+
     private void updateAverageRating(Restaurant restaurant){
         List<Review>  reviews = restaurant.getReviews();
         if (reviews.isEmpty()) restaurant.setAverageRating(0.0f);
