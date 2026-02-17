@@ -6,6 +6,7 @@ import com.project.Restourent.domain.dtos.response.ApiResponse;
 import com.project.Restourent.domain.entities.Review;
 import com.project.Restourent.domain.entities.ReviewCreateUpdateRequest;
 import com.project.Restourent.domain.entities.User;
+import com.project.Restourent.exception.ReviewNotFoundException;
 import com.project.Restourent.mapper.ReviewMapper;
 import com.project.Restourent.service.ReviewService;
 import jakarta.validation.Valid;
@@ -21,6 +22,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.*;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/restaurants/{restaurant_id}/reviews")
@@ -60,6 +62,24 @@ public class ReviewController {
             ) Pageable pageable
     ){
         return reviewService.listReview(restaurantId,pageable).map(reviewMapper::toDto);
+    }
+
+    @GetMapping("/{review_id}")
+    public ResponseEntity<ApiResponse> getReview(
+            @PathVariable(name = "restaurant_id") String restaurantId,
+            @PathVariable(name = "review_id") String reviewId
+    ){
+        Review review = reviewService.getReview(restaurantId,reviewId).orElseThrow(
+                () -> new ReviewNotFoundException("Review Not found with ID : "+ reviewId)
+        );
+        return new ResponseEntity<>(
+                new ApiResponse(
+                        HttpStatus.OK.value(),
+                        "Review Retrieve Successfully",
+                        review
+                ),
+                HttpStatus.OK
+        );
     }
 
     private User jwtToUser(Jwt jwt){
