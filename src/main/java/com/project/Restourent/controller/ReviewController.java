@@ -9,6 +9,7 @@ import com.project.Restourent.domain.entities.User;
 import com.project.Restourent.exception.ReviewNotFoundException;
 import com.project.Restourent.mapper.ReviewMapper;
 import com.project.Restourent.service.ReviewService;
+import jakarta.validation.Path;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -80,6 +81,29 @@ public class ReviewController {
                 ),
                 HttpStatus.OK
         );
+    }
+
+    @PutMapping("/{review_id}")
+    public ResponseEntity<ApiResponse> updateReview(
+            @PathVariable(name = "review_id") String reviewId,
+            @PathVariable(name = "restaurant_id") String restaurantId,
+            @Valid @RequestBody ReviewCreateUpdateRequestDto review,
+            @AuthenticationPrincipal Jwt jwt
+    ){
+        Review updatedReview = reviewService.updateReview(
+                jwtToUser(jwt),
+                restaurantId,
+                reviewId,
+                reviewMapper.toReviewCreateUpdateRequest(review)
+        );
+        return new ResponseEntity<>(
+                new ApiResponse(
+                        HttpStatus.OK.value(),
+                        "Review Updated Successfully",
+                        updatedReview
+                ),
+                HttpStatus.OK);
+        
     }
 
     private User jwtToUser(Jwt jwt){
