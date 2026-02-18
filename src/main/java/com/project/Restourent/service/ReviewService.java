@@ -1,0 +1,17 @@
+package com.project.Restourent.service;
+
+import com.project.Restourent.domain.entities.Review;
+import com.project.Restourent.domain.entities.ReviewCreateUpdateRequest;
+import com.project.Restourent.domain.entities.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.util.Optional;
+
+public interface ReviewService {
+    public Review createReview(User user, String restaurantId, ReviewCreateUpdateRequest review);
+    public Page<Review> listReview(String restaurantId , Pageable pageable);
+    public Optional<Review> getReview(String restaurantId,String reviewId);
+    public Review updateReview(User user,String restaurantId, String reviewId,ReviewCreateUpdateRequest reviewCreateUpdateRequest);
+    public void deleteReview(User user,String restaurantId,String reviewId);
+}
