@@ -2,7 +2,7 @@ package com.project.Restourent.controller;
 
 import com.project.Restourent.domain.dtos.response.ApiResponse;
 import com.project.Restourent.domain.entities.Photo;
-import com.project.Restourent.mappers.PhotoMapper;
+import com.project.Restourent.mapper.PhotoMapper;
 import com.project.Restourent.service.PhotoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;

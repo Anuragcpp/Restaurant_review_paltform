@@ -31,6 +31,7 @@ public interface RestaurantMappers {
 
     @Named("populateTotalReview")
     default Integer populateTotalReview(List<Review> reviews){
+        if (reviews == null )return 0;
         return reviews.size();
     }
 }

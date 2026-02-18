@@ -1,4 +1,4 @@
-package com.project.Restourent.mappers;
+package com.project.Restourent.mapper;
 
 import com.project.Restourent.domain.dtos.PhotoDto;
 import com.project.Restourent.domain.entities.Photo;
