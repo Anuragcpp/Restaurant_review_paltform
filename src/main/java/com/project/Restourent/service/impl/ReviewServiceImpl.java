@@ -129,6 +129,19 @@ public class ReviewServiceImpl implements ReviewService {
         return existingReview;
     }
 
+    @Override
+    public void deleteReview(User user, String restaurantId, String reviewId) {
+        Restaurant restaurant = getRestaurantOrThrough(restaurantId);
+        Review review = getReviewFromRestaurant(reviewId,restaurant).orElseThrow(
+                () -> new ReviewNotAllowedException("Review not Found with Id : "+ reviewId)
+        );
+        if (!review.getWrittenBy().getId().equals(user.getId())) throw new ReviewNotAllowedException("Can't delete other user's review");
+        List<Review> updatedReview = restaurant.getReviews().stream().filter(r -> !r.getId().equals(reviewId)).toList();
+        restaurant.setReviews(updatedReview);
+        updateAverageRating(restaurant);
+        restaurantRepository.save(restaurant);
+    }
+
     @NotNull
     private static Optional<Review> getReviewFromRestaurant(String reviewId, Restaurant restaurant) {
         return restaurant.getReviews().stream().filter(review -> review.getId().equals(reviewId)).findFirst();

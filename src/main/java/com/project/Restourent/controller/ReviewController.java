@@ -106,6 +106,27 @@ public class ReviewController {
         
     }
 
+    @DeleteMapping("/{review_id}")
+    public ResponseEntity<ApiResponse> deleteReview(
+            @PathVariable(name = "review_id") String reviewId,
+            @PathVariable(name = "restaurant_id") String restaurantID,
+            @AuthenticationPrincipal Jwt jwt
+    ) {
+        reviewService.deleteReview(
+                jwtToUser(jwt),
+                restaurantID,
+                reviewId
+        );
+        return new ResponseEntity<>(
+                new ApiResponse(
+                        HttpStatus.OK.value(),
+                        "Review Deleted Successfully",
+                        null
+                ),
+                HttpStatus.OK
+        );
+    }
+
     private User jwtToUser(Jwt jwt){
         return User.builder()
                 .id(jwt.getSubject())

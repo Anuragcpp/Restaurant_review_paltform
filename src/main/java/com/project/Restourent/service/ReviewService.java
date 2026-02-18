@@ -13,4 +13,5 @@ public interface ReviewService {
     public Page<Review> listReview(String restaurantId , Pageable pageable);
     public Optional<Review> getReview(String restaurantId,String reviewId);
     public Review updateReview(User user,String restaurantId, String reviewId,ReviewCreateUpdateRequest reviewCreateUpdateRequest);
+    public void deleteReview(User user,String restaurantId,String reviewId);
 }
